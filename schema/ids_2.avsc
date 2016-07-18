@@ -1,0 +1,18 @@
+{
+  "type" : "record",
+  "namespace" : "ids",
+  "name" : "IDs",
+  "fields" : 
+  [
+   {"name" : "Global_Id" , "type" : "string", "avro.java.string":"String" },
+   {"name" : "Imei", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Mac", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Imsi", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Phone_Number", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Idfa", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Openudid", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Uid", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} },
+   {"name" : "Did", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} }
+   {"name" : "Android_Id", "type" : { "avro.java.string":"String", "type" : "map", "values" : "int"} }
+  ]
+} 

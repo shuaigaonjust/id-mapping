@@ -1,0 +1,17 @@
+{
+  "type" : "record",
+  "namespace" : "ids",
+  "name" : "IDs",
+  "fields" : 
+  [
+   {"name" : "Global_Id" , "type" : "string" },
+   {"name" : "Imei", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Mac", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Imsi", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Phone_Number", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Idfa", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Openudid", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Uid", "type" : { "type" : "map", "values" : "int"} },
+   {"name" : "Did", "type" : { "type" : "map", "values" : "int"} }
+  ]
+} 
