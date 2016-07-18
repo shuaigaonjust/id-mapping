@@ -9,7 +9,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 
 /**
-  * Created by zhangjie on 16/6/15.
+  * create by zhangjie
+  * 2016-06-14
   */
 object SparkIdMapping3 {
 
@@ -48,15 +49,6 @@ object SparkIdMapping3 {
 
 
   def main(args: Array[String]) {
-    /*
-    val spark_home = "D:/spark-1.6.0-bin-hadoop2.6"
-    val conf = new SparkConf().setAppName("idmapping converge id").setSparkHome(spark_home).setMaster("local[1]")
-    val sc = new SparkContext(conf)
-
-    val df = sc.newAPIHadoopFile[AvroKey[IDs], NullWritable, AvroKeyInputFormat[IDs]]("output2/")
-    val out = df.map(data2IDs).groupByKey().map(combineValueThree)
-    out.saveAsNewAPIHadoopFile[IDsOutputFormat]("output3")
-*/
 
     val conf = new SparkConf()
     val sc = new SparkContext(conf)

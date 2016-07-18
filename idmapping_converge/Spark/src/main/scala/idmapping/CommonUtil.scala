@@ -5,6 +5,10 @@ import scala.collection.mutable
 import scala.util.Random
 import ids.IDs
 
+/**
+  * create by zhangjie
+  * 2016-06-14
+  */
 object CommonUtil{
 
   val commonStr = "abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"

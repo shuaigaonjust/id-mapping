@@ -9,10 +9,9 @@ import org.apache.spark.{SparkConf, SparkContext}
 import scala.collection.mutable.ArrayBuffer
 
 /**
-  * Created by zhangjie on 16/6/15.
+  * create by zhangjie
+  * 2016-06-14
   */
-
-
 object SparkIdMapping2 {
 
   /*取出AvroKey封装的IDs对象*/
@@ -70,14 +69,6 @@ object SparkIdMapping2 {
   }
 
   def main(args: Array[String]) {
-    /*
-        val spark_home = "D:/spark-1.6.0-bin-hadoop2.6"
-        val conf = new SparkConf().setAppName("idmapping converge id1").setSparkHome(spark_home).setMaster("local[1]")
-        val sc = new SparkContext(conf)
-        val df = sc.newAPIHadoopFile[AvroKey[IDs], NullWritable, AvroKeyInputFormat[IDs]]("output1/")
-        val out = df.map(data2IDs).map(idsToSecondKey).groupByKey().flatMap(combineValueTwo)
-        out.saveAsNewAPIHadoopFile[IDsOutputFormat]("output2")
-*/
 
     val conf = new SparkConf()
     val sc = new SparkContext(conf)

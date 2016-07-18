@@ -107,15 +107,6 @@ object SparkIdMapping1 {
 
 
   def main(args: Array[String]) {
-//    val spark_home = "D:/spark-1.6.0-bin-hadoop2.6"
-//    val conf = new SparkConf().setAppName("idmapping converge id").setSparkHome(spark_home).setMaster("local[4]")
-//    val sc = new SparkContext(conf)
-//
-//    val df = sc.newAPIHadoopFile[AvroKey[IDs], NullWritable, AvroKeyInputFormat[IDs]]("input1/")
-//    val out = df.map(data2IDs).flatMap(idsToDouble).groupByKey().flatMap(combineValue)
-////    out.saveAsNewAPIHadoopFile[IDsOutputFormat]("output2")
-//    out.map(t => t._2).saveAsTextFile("output-text")
-
     val conf = new SparkConf()
     val sc = new SparkContext(conf)
 
