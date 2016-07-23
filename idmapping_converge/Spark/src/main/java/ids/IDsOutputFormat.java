@@ -20,22 +20,6 @@ import java.io.IOException;
 
 public class IDsOutputFormat extends FileOutputFormat<NullWritable, ids.IDs> {
 
-    final static DataFileWriter<ids.IDs> dataFileWriter =
-            new DataFileWriter<ids.IDs>(new GenericDatumWriter<ids.IDs>(ids.IDs.getClassSchema()));
-
-    public static class IDsRecordWriter extends RecordWriter<NullWritable, ids.IDs> {
-
-        @Override
-        public void write(NullWritable nullWritable, ids.IDs iDs) throws IOException, InterruptedException {
-            dataFileWriter.append(iDs);
-        }
-
-        @Override
-        public void close(TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
-            dataFileWriter.close();
-        }
-    }
-
     public RecordWriter<NullWritable, ids.IDs> getRecordWriter(TaskAttemptContext job)
             throws IOException, InterruptedException {
 
@@ -43,10 +27,29 @@ public class IDsOutputFormat extends FileOutputFormat<NullWritable, ids.IDs> {
         Path file = getDefaultWorkFile(job, ".avro");
         FileSystem fs = file.getFileSystem(conf);
         FSDataOutputStream fileOut = fs.create(file, false);
+        DataFileWriter<ids.IDs> dataFileWriter =
+                new DataFileWriter<ids.IDs>(new GenericDatumWriter<ids.IDs>(ids.IDs.getClassSchema()));
         dataFileWriter.setCodec(CodecFactory.deflateCodec(8));
         dataFileWriter.create(ids.IDs.getClassSchema(), fileOut);
-        return new IDsRecordWriter();
+        return new IDsRecordWriter(dataFileWriter);
     }
-}
 
+    public static class IDsRecordWriter extends RecordWriter<NullWritable, ids.IDs> {
+
+        private DataFileWriter<ids.IDs> dataFileWriter = null;
+        public IDsRecordWriter(DataFileWriter<ids.IDs> dataFileWriter){
+            this.dataFileWriter = dataFileWriter;
+        }
+
+        @Override
+        public void write(NullWritable nullWritable, ids.IDs iDs) throws IOException, InterruptedException {
+            dataFileWriter.append(iDs);
+        }
+        @Override
+        public void close(TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
+            dataFileWriter.close();
+        }
+    }
+
+}
 

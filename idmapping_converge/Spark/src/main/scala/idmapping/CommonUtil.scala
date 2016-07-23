@@ -2,7 +2,7 @@ package idmapping
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
-import scala.util.Random
+import java.util.UUID;
 import ids.IDs
 
 /**
@@ -10,22 +10,13 @@ import ids.IDs
   * 2016-06-14
   */
 object CommonUtil{
-
-  val commonStr = "abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   var id = "imei"
-
-
-  def getRandomString(str : String): String = {
-      this.synchronized {
-        val base = str
-        val random = new Random()
-        val strBuffer = new StringBuffer
-        for (i <- 0 until base.length) {
-          val num = random.nextInt(base.length)
-          strBuffer.append(base.charAt(num))
+  val SPLIT_MAXSIZE = "mapreduce.input.fileinputformat.split.maxsize"
+  val SPLIT_MINSIZE = "mapreduce.input.fileinputformat.split.minsize"
+  def getRandomString(): String = {
+        this.synchronized {
+             UUID.randomUUID().toString
         }
-        strBuffer.toString
-      }
   }
 
   def getOneGlobalId(ids: IDs): String = {
@@ -46,7 +37,11 @@ object CommonUtil{
             ids.getUid.keySet.iterator.next
           } else if (ids.getDid.size != 0) {
             ids.getDid.keySet.iterator.next
-          } else {
+          }
+            // else if (ids.getAndroidId.size != 0) {
+//            ids.getAndroidId.keySet.iterator.next
+//          }
+          else {
             ""
           }
       }
@@ -63,6 +58,7 @@ object CommonUtil{
       ids.setImsi(new java.util.HashMap[String, Integer])
       ids.setUid(new java.util.HashMap[String, Integer])
       ids.setDid(new java.util.HashMap[String, Integer])
+//      ids.setAndroiId(new java.util.HashMap[String, Integer]())
     }
   }
 
@@ -77,6 +73,7 @@ object CommonUtil{
       ids.setImsi(new mutable.HashMap[String, Integer])
       ids.setUid(new mutable.HashMap[String, Integer])
       ids.setDid(new mutable.HashMap[String, Integer])
+//      ids.setAndroiId(new mutable.HashMap[String, Integer])
   }
   }
 
@@ -111,6 +108,8 @@ object CommonUtil{
         addToMap(idSource.getImsi, idDes.getImsi) ||
         addToMap(idSource.getUid, idDes.getUid) ||
         addToMap(idSource.getDid, idDes.getDid)
+//      ||
+//        addToMap(idSource.getAndroidId, idDes.getAndroidId)
     }
   }
 
@@ -124,6 +123,7 @@ object CommonUtil{
       addToMap(idSource.getImsi, idDes.getImsi)
       addToMap(idSource.getUid, idDes.getUid)
       addToMap(idSource.getDid, idDes.getDid)
+//      addToMap(idSource.getAndroidId, idDes.getAndroidId)
     }
   }
 

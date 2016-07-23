@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.io.Serializable;
 
 @SuppressWarnings("all")
-  @org.apache.avro.specific.AvroGenerated
-  public class IDs extends org.apache.avro.specific.SpecificRecordBase implements Serializable,  org.apache.avro.specific.SpecificRecord, Writable {
-    private static final long serialVersionUID = 4758961859436357763L;
-    public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"IDs\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"Global_Id\",\"type\":\"string\",\"avro.java.string\":\"String\"},{\"name\":\"Imei\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Mac\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Imsi\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Phone_Number\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Idfa\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Openudid\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Uid\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Did\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}}]}");
-    public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
+@org.apache.avro.specific.AvroGenerated
+public class IDs extends org.apache.avro.specific.SpecificRecordBase implements Serializable,  org.apache.avro.specific.SpecificRecord, Writable {
+  private static final long serialVersionUID = 4758961859436357763L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"IDs\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"Global_Id\",\"type\":\"string\",\"avro.java.string\":\"String\"},{\"name\":\"Imei\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Mac\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Imsi\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Phone_Number\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Idfa\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Openudid\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Uid\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}},{\"name\":\"Did\",\"type\":{\"avro.java.string\":\"String\",\"type\":\"map\",\"values\":\"int\"}}]}");
+  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-    @Deprecated public String Global_Id;
+  @Deprecated public String Global_Id;
   @Deprecated public java.util.Map<String,Integer> Imei;
   @Deprecated public java.util.Map<String,Integer> Mac;
   @Deprecated public java.util.Map<String,Integer> Imsi;
@@ -28,7 +28,7 @@ import java.io.Serializable;
   @Deprecated public java.util.Map<String,Integer> Openudid;
   @Deprecated public java.util.Map<String,Integer> Uid;
   @Deprecated public java.util.Map<String,Integer> Did;
-
+ // @Deprecated public java.util.Map<String,Integer> Android_Id;
   /**
    * Default constructor.  Note that this does not initialize fields
    * to their default values from the schema.  If that is desired then
@@ -49,6 +49,7 @@ import java.io.Serializable;
     this.Openudid = Openudid;
     this.Uid = Uid;
     this.Did = Did;
+ //   this.Android_Id = Android_Id;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -64,6 +65,7 @@ import java.io.Serializable;
       case 6: return Openudid;
       case 7: return Uid;
       case 8: return Did;
+     // case 9: return Android_Id;
       default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -87,6 +89,7 @@ import java.io.Serializable;
       case 6: Openudid = (java.util.Map<String,Integer>)value$; break;
       case 7: Uid = (java.util.Map<String,Integer>)value$; break;
       case 8: Did = (java.util.Map<String,Integer>)value$; break;
+    //  case 9: Android_Id = (java.util.Map<String,Integer>)value$; break;
       default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -226,6 +229,21 @@ import java.io.Serializable;
     this.Did = value;
   }
 
+//  /**
+//   * Gets the value of the 'Android_Id' field.
+//   */
+//  public java.util.Map<String,Integer> getAndroidId() {
+//    return Android_Id;
+//  }
+//
+//  /**
+//   * Sets the value of the 'Android_Id' field.
+//   * @param value the value to set.
+//   */
+//  public void setAndroiId(java.util.Map<String,Integer> value) {
+//    this.Android_Id = value;
+//  }
+
   /**
    * Creates a new IDs RecordBuilder.
    * @return A new IDs RecordBuilder
@@ -272,6 +290,7 @@ import java.io.Serializable;
     this.setImei(id.getImei());
     this.setImsi(id.getImsi());
     this.setDid(id.getDid());
+//    this.setAndroiId(id.getAndroidId());
   }
 
   /**
@@ -289,6 +308,7 @@ import java.io.Serializable;
     private java.util.Map<String,Integer> Openudid;
     private java.util.Map<String,Integer> Uid;
     private java.util.Map<String,Integer> Did;
+//    private java.util.Map<String,Integer> Android_Id;
 
     /** Creates a new Builder */
     private Builder() {
@@ -337,6 +357,10 @@ import java.io.Serializable;
         this.Did = data().deepCopy(fields()[8].schema(), other.Did);
         fieldSetFlags()[8] = true;
       }
+//      if (isValidValue(fields()[9], other.Android_Id)) {
+//        this.Android_Id = data().deepCopy(fields()[9].schema(), other.Android_Id);
+//        fieldSetFlags()[9] = true;
+//      }
     }
 
     /**
@@ -381,6 +405,10 @@ import java.io.Serializable;
         this.Did = data().deepCopy(fields()[8].schema(), other.Did);
         fieldSetFlags()[8] = true;
       }
+//      if (isValidValue(fields()[9], other.Android_Id)) {
+//        this.Android_Id = data().deepCopy(fields()[9].schema(), other.Android_Id);
+//        fieldSetFlags()[9] = true;
+//      }
     }
 
     /**
@@ -734,6 +762,45 @@ import java.io.Serializable;
       return this;
     }
 
+//    /**
+//     * Gets the value of the 'Android_Id' field.
+//     * @return The value.
+//     */
+//    public java.util.Map<String,Integer> getAndroidId() {
+//      return Android_Id;
+//    }
+//
+//    /**
+//     * Sets the value of the 'Android_Id' field.
+//     * @param value The value of 'Android_Id'.
+//     * @return This builder.
+//     */
+//    public IDs.Builder setAndroidId(java.util.Map<String,Integer> value) {
+//      validate(fields()[9], value);
+//      this.Android_Id = value;
+//      fieldSetFlags()[9] = true;
+//      return this;
+//    }
+//
+//    /**
+//     * Checks whether the 'Android_Id' field has been set.
+//     * @return True if the 'Android_Id' field has been set, false otherwise.
+//     */
+//    public boolean hasAndroidId() {
+//      return fieldSetFlags()[9];
+//    }
+//
+//
+//    /**
+//     * Clears the value of the 'Android_Id' field.
+//     * @return This builder.
+//     */
+//    public IDs.Builder clearAndroidId() {
+//      Android_Id = null;
+//      fieldSetFlags()[9] = false;
+//      return this;
+//    }
+
     public IDs build() {
       try {
         IDs record = new IDs();
@@ -746,6 +813,7 @@ import java.io.Serializable;
         record.Openudid = fieldSetFlags()[6] ? this.Openudid : (java.util.Map<String,Integer>) defaultValue(fields()[6]);
         record.Uid = fieldSetFlags()[7] ? this.Uid : (java.util.Map<String,Integer>) defaultValue(fields()[7]);
         record.Did = fieldSetFlags()[8] ? this.Did : (java.util.Map<String,Integer>) defaultValue(fields()[8]);
+//        record.Android_Id = fieldSetFlags()[9] ? this.Android_Id : (java.util.Map<String,Integer>) defaultValue(fields()[9]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
