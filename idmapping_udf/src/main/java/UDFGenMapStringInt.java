@@ -8,7 +8,7 @@ public class UDFGenMapStringInt extends UDF {
 
 	public Map<String, Integer> evaluate(String str) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		if(str.length() != 0 && !str.equals("EMPTY") && str != null) {
+		if(str.length() != 0 && !str.toUpperCase().equals("EMPTY") && str != null) {
 			map.put(str, 0);
 		}
 		return map;
@@ -16,7 +16,7 @@ public class UDFGenMapStringInt extends UDF {
 	
 	public Map<String, Integer> evaluate(String str, int activity) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		if(str.length() != 0 && !str.equals("EMPTY") && str != null) {
+		if(str.length() != 0 && !str.toUpperCase().equals("EMPTY") && str != null) {
 			map.put(str, activity);
 		}
 		return map;
