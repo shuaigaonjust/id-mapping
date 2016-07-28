@@ -1,0 +1,106 @@
+ad_log mi_data py_yun sdk_log
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160603
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160604
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160605
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160606
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160607
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160608
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160609
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160610
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160611
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160612
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160613
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160614
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160615
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160616
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160617
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160618
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160619
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160620
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160621
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160622
+0  0  /user/compass/public/hive/idmapping/ids_2/product=ad_log/day=20160623
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=%7B20160415
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160415
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160501
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160508
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160515
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160522
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160602
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160609
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160616
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160623
+0  0  /user/compass/public/hive/idmapping/ids_2/product=lingxi/day=20160630
+0  0  /user/compass/public/hive/idmapping/ids_2/product=sdk_log/day=2016062
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vc_up/day=20160623
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160516
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160517
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160518
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160519
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160520
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160521
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160522
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160523
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160524
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160525
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160526
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160527
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160528
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160529
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160530
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160531
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160601
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=20160602
+0  0  /user/compass/public/hive/idmapping/ids_2/product=vcoam_log/day=2016061
+
+
+<workflow-app xmlns='uri:oozie:workflow:0.1' name='add-partitions-daily'>
+  <start to="add-partition"/>
+
+
+  <action name="add-partition">
+    <hive2 xmlns="uri:oozie:hive2-action:0.1">
+      <job-tracker>${hfjobTracker}</job-tracker>
+      <name-node>${hfNameNode}</name-node>
+      <configuration>
+        <property>
+          <name>mapreduce.job.queuename</name>
+          <value>${queueName}</value>
+        </property>
+      </configuration>
+      <jdbc-url>jdbc:hive2://172.16.63.32:10000/etl</jdbc-url>
+      <script>${hfNameNode}/user/jyzheng/data/script/add_partition_daily.sql</script>
+      <param>DAYTIME=${dayTime}</param>
+    </hive2>
+    <ok to="end"/>
+    <error to="fail"/>
+  </action>
+
+  <kill name="fail">
+    <message>Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]
+    </message>
+  </kill>
+  <end name="end"/>
+</workflow-app>
+
+set mapreduce.job.queuename=dmp;
+set mapreduce.job.name=idmapping_gen_sdk_log;
+add jar hdfs://ns-hf/user/compass/public/hive/idmapping/jars/idmapping.jar;
+create temporary function myfun as 'UDFGenMapStringInt';
+create temporary function myfunmac as 'UDFGenMacMap';
+insert overwrite table idmapping.ids_2 partition (product="sdk_log",day="20160516")
+select
+  distinct
+  "" as global_id,
+  myfun(regexp_extract(imei,"^([0-9a-zA-Z]{14,20})$", 1)) as imei,
+  myfunmac(mac, "mac") as mac,
+  myfun(regexp_extract(imsi,"^([0-9]{15,16})$", 1)) as imsi,
+  myfun("") as phone_number,
+  myfun("") as idfa,
+  myfun("") as openudid,
+  myfun("") as uid,
+  myfun(did) as did,
+  myfun("") as android_id
+from
+  etl.sdk_log
+where day_time = date("2016-05-16");
