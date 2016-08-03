@@ -1,5 +1,5 @@
-for day in `seq -w {16,31}` 
-do hive --hivevar year=2016 --hivevar month=05 --hivevar day=$day -f gen_vcoam.sql 
+for day in `seq -w {24,27}` 
+do echo "hive --hivevar year=2016 --hivevar month=05 --hivevar day=$day -f gen_ad_log.sql" 
 done;
 
 for day in {20160415 20160501 20160508 20160515 20160522 20160602 20160609 20160616 20160623 20160630} 
