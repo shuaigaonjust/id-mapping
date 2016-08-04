@@ -1,19 +1,17 @@
 package com.iflytek.hadoop.idmapping.mapreduce;
 
+import com.iflytek.hadoop.idmapping.constants.ShareConstants;
+import com.iflytek.hadoop.idmapping.util.IdMappingUtil;
 import ids.IDs;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.iflytek.hadoop.idmapping.constants.ShareConstants;
-import com.iflytek.hadoop.idmapping.util.IdMappingUtil;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class IdMappingMR1 {
 	/*  idmapping step I mapper class
@@ -62,42 +60,41 @@ public class IdMappingMR1 {
 				}
 				return;
 	     	}
-					// 2. 聚合数据
-					IDs tempIDs = new IDs();
-					IdMappingUtil.initIDs(tempIDs);
-					ArrayList<String> secondKeys = new ArrayList<String>();
-					// 2.1 聚合ID，并输出，发现超过10个则停止
-					Boolean isOverTen = false;
-					for (IDs ids : values) {
-						context.write(null, ids);
-						context.getCounter("idmapping","reduce_key_is_not_null").increment(1);
-						String tempGlobalId = ids.getGlobalId();
-						if(!secondKeys.contains(tempGlobalId))
-						   secondKeys.add(tempGlobalId);
-						if (IdMappingUtil.convergeIDAndCheckSize(ids, tempIDs) == true) {
-							  isOverTen = true;
-							  break;
-						}else{
-							  continue;
-						}
-					}
-					/* 2.2 输出阶段，如果聚合ID超过10个，直接输出，否则将聚合后的结果输出
-					*  无论有没有超过10个，原始结果都会输出一遍，不影响后续还原聚合（没有增加数据）
-					*  目的是为了处理异常情况，否则大于10个要保存，会造成reduce OOM问题
-					 */
-				    if (isOverTen == true) {
-				    	for(IDs ids:values){
-				    		context.write(null, ids);
-				    	}
-				    } else {
-			            for(String secondKey : secondKeys){
-			            	context.getCounter("idmapping","secondkeywrite").increment(1);
-							// 用global_id来保存secondKey，用作step II还原的key
-			            	tempIDs.setGlobalId(secondKey);
-					        context.write(null, tempIDs);
-			            }
-				    }
-
+			// 2. 聚合数据
+			IDs tempIDs = new IDs();
+			IdMappingUtil.initIDs(tempIDs);
+			ArrayList<String> secondKeys = new ArrayList<String>();
+			// 2.1 聚合ID，并输出，发现超过10个则停止
+			Boolean isOverTen = false;
+			for (IDs ids : values) {
+				context.write(null, ids);
+				context.getCounter("idmapping","reduce_key_is_not_null").increment(1);
+				String tempGlobalId = ids.getGlobalId();
+				if(!secondKeys.contains(tempGlobalId))
+				   secondKeys.add(tempGlobalId);
+				if (IdMappingUtil.convergeIDAndCheckSize(ids, tempIDs) == true) {
+					  isOverTen = true;
+					  break;
+				}else{
+					  continue;
+				}
+			}
+			/* 2.2 输出阶段，如果聚合ID超过10个，直接输出，否则将聚合后的结果输出
+			*  无论有没有超过10个，原始结果都会输出一遍，不影响后续还原聚合（没有增加数据）
+			*  目的是为了处理异常情况，否则大于10个要保存，会造成reduce OOM问题
+			 */
+			if (isOverTen == true) {
+			   for(IDs ids:values){
+				context.write(null, ids);
+			   }
+			} else {
+			   for(String secondKey : secondKeys){
+			   	context.getCounter("idmapping","secondkeywrite").increment(1);
+					// 用global_id来保存secondKey，用作step II还原的key
+			   	tempIDs.setGlobalId(secondKey);
+			        context.write(null, tempIDs);
+			   }
+			}
 		}
     }
 }
