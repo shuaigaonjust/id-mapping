@@ -1,6 +1,5 @@
 package com.iflytek.hadoop.idmapping.mapreduce;
 
-import com.iflytek.hadoop.idmapping.constants.ShareConstants;
 import com.iflytek.hadoop.idmapping.util.IdMappingUtil;
 import ids.IDs;
 import org.apache.avro.mapred.AvroKey;
@@ -22,24 +21,22 @@ public class IdMappingMR1 {
     public static class IdMappingM1 extends Mapper<AvroKey<IDs>,NullWritable,Text,IDs> {
 		@Override
 		public void map(AvroKey<IDs> key,NullWritable value,Context context) throws IOException,InterruptedException {
-			String id = context.getConfiguration().get(ShareConstants.ID);
-			context.getCounter("Counters", id + "-before").increment(1);
-            Map<String,Integer> ids = IdMappingUtil.getMapByIdType(key.datum() ,id);
+            Map<String,Integer> ids = IdMappingUtil.getMapByIdType(key.datum() , "all");
             // 初始化global_id为空
             key.datum().setGlobalId("");
             if( ids!= null && ids.size() != 0){
 				// 选取一个ID用来做stpe II的还原操作， 增加随机值是为了按原样还原
-            	String secondKey = (String) ids.keySet().toArray()[0] + IdMappingUtil.getRandomString(context.getTaskAttemptID().toString(),Integer.MAX_VALUE);
+            	String secondKey = (String) ids.keySet().toArray()[0]
+						+ (String)  ids.keySet().toArray()[ids.keySet().size() - 1]
+						+ IdMappingUtil.getRandomString(context.getTaskAttemptID().toString(),Integer.MAX_VALUE);
             	key.datum().setGlobalId(secondKey);
-            	context.getCounter("idmapping","befor").increment(1);
 	        	for(Map.Entry<String, Integer> entry: ids.entrySet()){
 	        		String idValue = entry.getKey();
 					context.write(new Text(idValue), key.datum());
-					context.getCounter("idmapping","decentralization").increment(1);
 	        	}
             }else{
 				// 如果ID为空，则标识保证不参与计算，并增加随机值保证负载平衡
-				context.write(new Text(id + "_" + IdMappingUtil.getRandomString(context.getTaskAttemptID().toString(),context.getNumReduceTasks())), key.datum());
+				context.write(new Text(IdMappingUtil.Random + "_" + IdMappingUtil.getRandomString(context.getTaskAttemptID().toString(),context.getNumReduceTasks())), key.datum());
             }
          }
     }
@@ -51,10 +48,8 @@ public class IdMappingMR1 {
 		@Override
 		public void reduce(Text key,Iterable<IDs> values,Context context)
                    throws IOException,InterruptedException{
-			// 0. 获取ID类型
-			String id = context.getConfiguration().get(ShareConstants.ID);
 	     	// 1. 判断ID是否为空值，即key是否以ID类型+'_'开头，如果是直接输出
-			if(key.toString().startsWith(id + "_")){
+			if(key.toString().startsWith(IdMappingUtil.Random + "_")){
 				for(IDs ids: values){
 	                   context.write(NullWritable.get(), ids);
 				}
@@ -68,7 +63,7 @@ public class IdMappingMR1 {
 			Boolean isOverTen = false;
 			for (IDs ids : values) {
 				context.write(null, ids);
-				context.getCounter("idmapping","reduce_key_is_not_null").increment(1);
+//				context.getCounter("idmapping","reduce_key_is_not_null").increment(1);
 				String tempGlobalId = ids.getGlobalId();
 				if(!secondKeys.contains(tempGlobalId))
 				   secondKeys.add(tempGlobalId);

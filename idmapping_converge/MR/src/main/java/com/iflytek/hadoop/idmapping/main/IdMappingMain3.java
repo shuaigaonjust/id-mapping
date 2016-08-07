@@ -1,13 +1,9 @@
 package com.iflytek.hadoop.idmapping.main;
 
+import com.iflytek.hadoop.idmapping.constants.ShareConstants;
+import com.iflytek.hadoop.idmapping.mapreduce.IdMappingMR3;
 import ids.IDs;
 import ids.IDsOutputFormat;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,8 +19,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import com.iflytek.hadoop.idmapping.constants.ShareConstants;
-import com.iflytek.hadoop.idmapping.mapreduce.IdMappingMR3;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class IdMappingMain3 implements Tool {
@@ -37,27 +35,21 @@ public class IdMappingMain3 implements Tool {
 	@Override
 	public int run(String[] args) throws Exception {
 
-		if (args == null || args.length < 5) {
-			System.out.println("Usage: <input> <output> <dataname> <starttime> <id>");
+		if (args == null || args.length != 4) {
+			System.out.println("Usage: <input> <output> <dataname> <starttime>");
 			throw new IllegalArgumentException("this method need five args at least!");
 		}
 
 		int length = args.length;
 
 		ArrayList<String> input = new ArrayList<String>();
-		for(int i = 0; i < length-4; i++){
+		for(int i = 0; i < length-3; i++){
 			input.add(args[i]);
 		}
 
-		String output = args[length-4];
-		String dataname = args[length-3];
-		String starttime = args[length-2];
-        String id = args[length-1];
-
-        if(!(id.equals("imei")) && !(id.equals("mac")) && !(id.equals("idfa")) && !(id.equals("openudid")) && !(id.equals("phonenumber")) && !(id.equals("imsi"))){
-        	System.err.println("Id must be one of <imei,mac,idfa,openudid,phonenumber,imsi>");
-        	System.exit(-1);
-        }
+		String output = args[length-3];
+		String dataname = args[length-2];
+		String starttime = args[length-1];
 
 		@SuppressWarnings("deprecation")
 		Job job = new Job(conf);
@@ -65,7 +57,6 @@ public class IdMappingMain3 implements Tool {
 		job.setJarByClass(IdMappingMain3.class);
 		job.getConfiguration().set(ShareConstants.EXTRACT_TIME, starttime);
 		job.getConfiguration().set(ShareConstants.EXTRACT_DATANAME, dataname);
-		job.getConfiguration().set(ShareConstants.ID, id);
 
 		job.setJobName(IdMappingMain3.class.getName() + ":" + dataname
 				+ "-" + starttime);

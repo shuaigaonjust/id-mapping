@@ -2,12 +2,14 @@ package com.iflytek.hadoop.idmapping.util;
 
 import ids.IDs;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class IdMappingUtil {
 	public static Random random = null;
+	public static String Random = "Random";
 
 	public synchronized static String getRandomString(String taskId, int taskNum) {
 		if (random == null) {
@@ -76,7 +78,7 @@ public class IdMappingUtil {
 		}
 	}
 
-	public synchronized static Map<String, Integer> getMapByIdType(IDs key, String type) {
+	public synchronized static Map<String, Integer> getMapByIdType(IDs key, String type) throws IOException {
 		switch(type){
 			case "imei":
 				return key.getImei();
@@ -90,8 +92,18 @@ public class IdMappingUtil {
 				return key.getImsi();
 			case "phonenumber":
 				return key.getPhoneNumber();
+			case "all":
+				Map<String, Integer> map = new HashMap<String, Integer>();
+				map.putAll(key.getImei());
+				map.putAll(key.getMac());
+				map.putAll(key.getIdfa());
+				map.putAll(key.getOpenudid());
+				map.putAll(key.getImsi());
+				map.putAll(key.getPhoneNumber());
+				return map;
+			default:
+				throw new IOException();
 		}
-		return null;
 	}
 
 	/* addIdToMap
