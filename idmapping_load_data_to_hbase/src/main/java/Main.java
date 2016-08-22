@@ -14,6 +14,8 @@ public class Main {
         int exitCode = 0;
         if (args[0].equals("ids")) {
             exitCode = ToolRunner.run(new LoadIDs2Hbase(), args);
+        } else if (args[0].equals("ids2")) {
+            exitCode = ToolRunner.run(new LoadIDs2Hbase2(), args);
         } else if (args[0].equals("index")) {
             exitCode = ToolRunner.run(new LoadIndex2Hbase(), args);
         } else {

@@ -15,10 +15,10 @@ import java.io.IOException;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class IDs extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord, Writable {
+public class IDs extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord, Writable,Cloneable {
   private Gson gson = new Gson();
   private static final long serialVersionUID = 4758961859436357763L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"IDs\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"Global_Id\",\"type\":\"string\",\"avro.java.string\":\"String\"},{\"name\":\"Imei\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Mac\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Imsi\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Phone_Number\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Idfa\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Openudid\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Uid\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Did\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"IDs\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"Global_Id\",\"type\":\"string\",\"avro.java.string\":\"String\"},{\"name\":\"Imei\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Mac\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Imsi\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Phone_Number\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Idfa\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Openudid\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Uid\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Did\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}},{\"name\":\"Android_Id\",\"type\":{\"type\":\"map\",\"values\":\"int\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public String Global_Id;
   @Deprecated public java.util.Map<String,Integer> Imei;
@@ -29,6 +29,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
   @Deprecated public java.util.Map<String,Integer> Openudid;
   @Deprecated public java.util.Map<String,Integer> Uid;
   @Deprecated public java.util.Map<String,Integer> Did;
+  @Deprecated public java.util.Map<String,Integer> Android_Id;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -36,6 +37,22 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
    * one should use <code>newBuilder()</code>.
    */
   public IDs() {}
+
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    IDs ids = new IDs();
+    ids.setGlobalId(this.getGlobalId());
+    ids.setImei(this.getImei());
+    ids.setMac(this.getMac());
+    ids.setImsi(this.getImsi());
+    ids.setPhoneNumber(this.getPhoneNumber());
+    ids.setIdfa(this.getIdfa());
+    ids.setOpenudid(this.getOpenudid());
+    ids.setUid(this.getUid());
+    ids.setDid(this.getDid());
+    ids.setAndroidId(this.getAndroidId());
+    return ids;
+  }
 
   /**
    * All-args constructor.
@@ -48,8 +65,9 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
    * @param Openudid The new value for Openudid
    * @param Uid The new value for Uid
    * @param Did The new value for Did
+   * @param Android_Id The new value for Android_Id
    */
-  public IDs(String Global_Id, java.util.Map<String,Integer> Imei, java.util.Map<String,Integer> Mac, java.util.Map<String,Integer> Imsi, java.util.Map<String,Integer> Phone_Number, java.util.Map<String,Integer> Idfa, java.util.Map<String,Integer> Openudid, java.util.Map<String,Integer> Uid, java.util.Map<String,Integer> Did) {
+  public IDs(String Global_Id, java.util.Map<String,Integer> Imei, java.util.Map<String,Integer> Mac, java.util.Map<String,Integer> Imsi, java.util.Map<String,Integer> Phone_Number, java.util.Map<String,Integer> Idfa, java.util.Map<String,Integer> Openudid, java.util.Map<String,Integer> Uid, java.util.Map<String,Integer> Did, java.util.Map<String,Integer> Android_Id) {
     this.Global_Id = Global_Id;
     this.Imei = Imei;
     this.Mac = Mac;
@@ -59,11 +77,14 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     this.Openudid = Openudid;
     this.Uid = Uid;
     this.Did = Did;
+    this.Android_Id = Android_Id;
   }
 
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+  @Override
+public org.apache.avro.Schema getSchema() { return SCHEMA$; }
   // Used by DatumWriter.  Applications should not call.
-  public Object get(int field$) {
+  @Override
+public Object get(int field$) {
     switch (field$) {
     case 0: return Global_Id;
     case 1: return Imei;
@@ -74,12 +95,14 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     case 6: return Openudid;
     case 7: return Uid;
     case 8: return Did;
+    case 9: return Android_Id;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
 
   // Used by DatumReader.  Applications should not call.
-  @SuppressWarnings(value="unchecked")
+  @Override
+@SuppressWarnings(value="unchecked")
   public void put(int field$, Object value$) {
     switch (field$) {
     case 0: Global_Id = (String)value$; break;
@@ -91,6 +114,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     case 6: Openudid = (java.util.Map<String,Integer>)value$; break;
     case 7: Uid = (java.util.Map<String,Integer>)value$; break;
     case 8: Did = (java.util.Map<String,Integer>)value$; break;
+    case 9: Android_Id = (java.util.Map<String,Integer>)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -240,6 +264,22 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
   }
 
   /**
+   * Gets the value of the 'Android_Id' field.
+   * @return The value of the 'Android_Id' field.
+   */
+  public java.util.Map<String,Integer> getAndroidId() {
+    return Android_Id;
+  }
+
+  /**
+   * Sets the value of the 'Android_Id' field.
+   * @param value the value to set.
+   */
+  public void setAndroidId(java.util.Map<String,Integer> value) {
+    this.Android_Id = value;
+  }
+
+  /**
    * Creates a new IDs RecordBuilder.
    * @return A new IDs RecordBuilder
    */
@@ -265,17 +305,17 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     return new Builder(other);
   }
 
-  public void write(DataOutput dataOutput) throws IOException {
+public void write(DataOutput dataOutput) throws IOException {
     byte[] bytes = this.toString().getBytes();
     dataOutput.writeInt(bytes.length);
     dataOutput.write(bytes, 0, bytes.length);
   }
 
-  public void readFields(DataInput dataInput) throws IOException {
+public void readFields(DataInput dataInput) throws IOException {
     int length = dataInput.readInt();
     byte[] bytes = new byte[length];
     dataInput.readFully(bytes, 0, length);
-    IDs id = (IDs)this.gson.fromJson(new String(bytes), IDs.class);
+    IDs id = this.gson.fromJson(new String(bytes), IDs.class);
     this.setGlobalId(id.getGlobalId());
     this.setUid(id.getUid());
     this.setPhoneNumber(id.getPhoneNumber());
@@ -285,6 +325,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     this.setImei(id.getImei());
     this.setImsi(id.getImsi());
     this.setDid(id.getDid());
+    this.setAndroidId(id.getAndroidId());
   }
 
   /**
@@ -302,6 +343,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     private java.util.Map<String,Integer> Openudid;
     private java.util.Map<String,Integer> Uid;
     private java.util.Map<String,Integer> Did;
+    private java.util.Map<String,Integer> Android_Id;
 
     /** Creates a new Builder */
     private Builder() {
@@ -350,6 +392,10 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
         this.Did = data().deepCopy(fields()[8].schema(), other.Did);
         fieldSetFlags()[8] = true;
       }
+      if (isValidValue(fields()[9], other.Android_Id)) {
+          this.Android_Id = data().deepCopy(fields()[9].schema(), other.Android_Id);
+          fieldSetFlags()[9] = true;
+      }
     }
 
     /**
@@ -393,6 +439,10 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
       if (isValidValue(fields()[8], other.Did)) {
         this.Did = data().deepCopy(fields()[8].schema(), other.Did);
         fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.Android_Id)) {
+          this.Android_Id = data().deepCopy(fields()[9].schema(), other.Android_Id);
+          fieldSetFlags()[9] = true;
       }
     }
 
@@ -747,7 +797,46 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
       return this;
     }
 
-    public IDs build() {
+    /**
+     * Gets the value of the 'Android_Id' field.
+     * @return The value.
+     */
+   public java.util.Map<String,Integer> getAndroidId() {
+     return Android_Id;
+   }
+
+   /**
+     * Sets the value of the 'Android_Id' field.
+     * @param value The value of 'Android_Id'.
+     * @return This builder.
+     */
+   public Builder setAndroidId(java.util.Map<String,Integer> value) {
+     validate(fields()[9], value);
+     this.Android_Id = value;
+     fieldSetFlags()[9] = true;
+     return this;
+   }
+
+   /**
+     * Checks whether the 'Android_Id' field has been set.
+     * @return True if the 'Android_Id' field has been set, false otherwise.
+     */
+   public boolean hasAndroidId() {
+     return fieldSetFlags()[9];
+   }
+
+
+   /**
+     * Clears the value of the 'Android_Id' field.
+     * @return This builder.
+     */
+   public Builder clearAndroidId() {
+	 Android_Id = null;
+     fieldSetFlags()[9] = false;
+     return this;
+   }
+
+	public IDs build() {
       try {
         IDs record = new IDs();
         record.Global_Id = fieldSetFlags()[0] ? this.Global_Id : (String) defaultValue(fields()[0]);
@@ -759,6 +848,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
         record.Openudid = fieldSetFlags()[6] ? this.Openudid : (java.util.Map<String,Integer>) defaultValue(fields()[6]);
         record.Uid = fieldSetFlags()[7] ? this.Uid : (java.util.Map<String,Integer>) defaultValue(fields()[7]);
         record.Did = fieldSetFlags()[8] ? this.Did : (java.util.Map<String,Integer>) defaultValue(fields()[8]);
+        record.Android_Id = fieldSetFlags()[9] ? this.Android_Id : (java.util.Map<String,Integer>) defaultValue(fields()[9]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
@@ -769,8 +859,9 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
   private static final org.apache.avro.io.DatumWriter
     WRITER$ = new org.apache.avro.specific.SpecificDatumWriter(SCHEMA$);
 
-  @Override public void writeExternal(java.io.ObjectOutput out)
-    throws java.io.IOException {
+  @Override
+public void writeExternal(java.io.ObjectOutput out)
+    throws IOException {
     WRITER$.write(this, SpecificData.getEncoder(out));
   }
 
@@ -778,7 +869,7 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
     READER$ = new org.apache.avro.specific.SpecificDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
-    throws java.io.IOException {
+    throws IOException {
     READER$.read(this, SpecificData.getDecoder(in));
   }
 

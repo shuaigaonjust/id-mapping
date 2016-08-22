@@ -26,9 +26,9 @@ public class UDFGenMapStringInt extends UDF {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		UDFGenMapStringInt uDFGenMapStringInt = new UDFGenMapStringInt();
+		UDFGenMapStringInt uDFGenMapStringInt = new UDFGenMapStringInt();
 //		System.out.print(uDFGenMapStringInt.evaluate("123").toString());
-//		System.out.print(uDFGenMapStringInt.evaluate("EMPTY").toString());
+		System.out.print(uDFGenMapStringInt.evaluate("empty").toString());
 //		System.out.print(uDFGenMapStringInt.evaluate("adf").toString());
 //		System.out.print(uDFGenMapStringInt.evaluate("").toString());
 

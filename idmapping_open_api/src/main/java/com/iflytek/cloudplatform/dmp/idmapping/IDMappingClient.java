@@ -30,12 +30,12 @@ public class IDMappingClient {
         if (inited == true) {
             return;
         }
-        zkPath = "idmapping-hbase-node1,idmapping-hbase-node2,idmapping-hbase-node3";
+        zkPath = "hfa-pro0041.hadoop.cpcc.iflyyun.cn,hfa-pro0043.hadoop.cpcc.iflyyun.cn,hfa-pro0042.hadoop.cpcc.iflyyun.cn";
         conf =  HBaseConfiguration.create();
         conf.set("hbase.zookeeper.quorum", zkPath);
         try {
-            hTableIDs = new HTable(conf, "hbase_ids");
-            hTableIndex = new HTable(conf, "hbase_index");
+            hTableIDs = new HTable(conf, "idmapping_ids");
+            hTableIndex = new HTable(conf, "idmapping_index");
         } catch (IOException e) {
             System.err.println("HBase connect failed!");
             System.exit(-1);
@@ -120,6 +120,10 @@ public class IDMappingClient {
         return getItemByKey(key, null, "uid");
     }
 
+    public Map<String, Integer> getAndroidId(String key) throws IOException {
+        return getItemByKey(key, null, "android_id");
+    }
+
     /**
      * @param key
      * @return null if not exsits, else IDs
@@ -139,6 +143,7 @@ public class IDMappingClient {
                 ids.setOpenudid(getItemByKey(key, idsResult, "openudid"));
                 ids.setDid(getItemByKey(key, idsResult, "did"));
                 ids.setUid(getItemByKey(key, idsResult, "uid"));
+                ids.setAndroidId(getItemByKey(key, idsResult, "android_id"));
             } else {
                 ids = null;
             }
@@ -158,7 +163,7 @@ public class IDMappingClient {
         System.out.println("  ---zkPath Optional , hbase zookeeper path");
     }
 
-    public static void main(String[] args) throws IOException {
+/*    public static void main(String[] args) throws IOException {
         if (args.length != 2 && args.length != 3 ) {
             help();
             System.exit(-1);
@@ -226,10 +231,10 @@ public class IDMappingClient {
         System.out.println("Search key : " + key);
         if(result != null && result.equals("{}")) {
             System.out.println("Key[" + key + "] is not find in database\n");
-
         } else {
             System.out.println("Result     : " + result + "\n");
         }
         idMappingClient.close();
     }
+    */
 }

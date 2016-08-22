@@ -35,12 +35,12 @@ public class UDTFExplodeIDs extends GenericUDTF {
 	@Override
 	public void process(Object[] arg) throws HiveException {
 		// TODO Auto-generated method stub
-		if (arg.length != 8) {
+		if (arg.length != 9) {
 			throw new HiveException();
 		}
 
 		String[] product = {"imei", "mac", "imsi", "phone_number", "idfa",
-				"openudid","uid","did"};
+				"openudid","uid","did","android_id"};
 
 		for (int i = 0; i < arg.length; i++)
 		{

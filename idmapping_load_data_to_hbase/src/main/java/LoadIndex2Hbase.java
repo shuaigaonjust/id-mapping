@@ -1,12 +1,19 @@
 import ids.Index;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapreduce.AvroJob;
+import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2;
+import org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
@@ -23,7 +30,7 @@ import java.io.IOException;
  */
 public class LoadIndex2Hbase implements Tool {
 
-    private String zkPath = "idmapping-hbase-node1,idmapping-hbase-node2,idmapping-hbase-node3";
+    private String zkPath = "10.10.12.82,10.10.12.83,10.10.12.84";
 
     public void setConf(Configuration configuration) {
 
@@ -54,22 +61,38 @@ public class LoadIndex2Hbase implements Tool {
 
     public int run(String[] strings) throws Exception {
         Configuration conf = new Configuration();
+        HBaseConfiguration.addHbaseResources(conf);
         conf.set("mapreduce.job.queuename", "dmp");
+        conf.set("mapreduce.job.name", "idmapping_load_index_to_hbase");
         Job job = new Job(conf);
+        FileSystem fs = FileSystem.get(conf);
+        Path output = new Path(strings[2]);
+        if (fs.exists(output)) {
+            fs.delete(output, true);//如果输出路径存在，就将其删除
+        }
         job.setJarByClass(LoadIndex2Hbase.class);
         job.setMapperClass(LoadIndex2HbaseMapper.class);
         job.setMapOutputKeyClass(ImmutableBytesWritable.class);
         job.setMapOutputValueClass(Put.class);
+        AvroJob.setInputKeySchema(job, ids.Index.getClassSchema());
+        job.setInputFormatClass(AvroKeyInputFormat.class);
+//        job.setOutputFormatClass(HFileOutputFormat2.class);
         FileInputFormat.addInputPath(job, new Path(strings[1]));
         FileOutputFormat.setOutputPath(job, new Path(strings[2]));
         Configuration hbaseConfiguration= HBaseConfiguration.create();
         hbaseConfiguration.set("mapreduce.job.queuename", "dmp");
         hbaseConfiguration.set("mapreduce.job.name", "idmapping-bulkload-index" + strings[1]);
         hbaseConfiguration.set("hbase.zookeeper.quorum", zkPath);
-        HTable table =new HTable(hbaseConfiguration, "hbase_index");
+        HTable table =new HTable(hbaseConfiguration, "idmapping_index");
+        Connection connection = ConnectionFactory.createConnection(hbaseConfiguration);
+        TableName tableName = TableName.valueOf("idmapping_index");
         HFileOutputFormat2.configureIncrementalLoad(job, table, table);
-        job.setNumReduceTasks(1000);
         int exitCode = job.waitForCompletion(true) == true ? 0 : 1;
+        if (exitCode == 0) {
+            LoadIncrementalHFiles loadFfiles = new LoadIncrementalHFiles(hbaseConfiguration);
+            loadFfiles.doBulkLoad(new Path(strings[2]), table);//导入数据
+            System.out.println("Bulk Load Completed..");
+        }
         return  exitCode;
     }
 

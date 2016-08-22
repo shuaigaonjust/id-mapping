@@ -15,13 +15,14 @@ import java.io.IOException;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class Index extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord, Writable, Cloneable {
-  private Gson gson = new Gson();
-  private static final long serialVersionUID = 2464611321926424530L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Index\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"id\",\"type\":\"string\",\"avro.java.string\":\"String\"},{\"name\":\"global_id\",\"type\":\"string\",\"avro.java.string\":\"String\"}]}");
+public class Index extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord,Writable {
+  private static final long serialVersionUID = 5185234679243144967L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Index\",\"namespace\":\"ids\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"global_id\",\"type\":\"string\"},{\"name\":\"product\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public String id;
   @Deprecated public String global_id;
+  @Deprecated public String product;
+  private Gson gson = new Gson();
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -30,22 +31,16 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
    */
   public Index() {}
 
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    Index index = new Index();
-    index.setId(this.getId());
-    index.setGlobalId(this.getGlobalId());
-    return index;
-  }
-
   /**
    * All-args constructor.
    * @param id The new value for id
    * @param global_id The new value for global_id
+   * @param product The new value for product
    */
-  public Index(String id, String global_id) {
+  public Index(String id, String global_id, String product) {
     this.id = id;
     this.global_id = global_id;
+    this.product = product;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -54,6 +49,7 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
     switch (field$) {
     case 0: return id;
     case 1: return global_id;
+    case 2: return product;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -64,6 +60,7 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
     switch (field$) {
     case 0: id = (String)value$; break;
     case 1: global_id = (String)value$; break;
+    case 2: product = (String)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -101,6 +98,22 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   /**
+   * Gets the value of the 'product' field.
+   * @return The value of the 'product' field.
+   */
+  public String getProduct() {
+    return product;
+  }
+
+  /**
+   * Sets the value of the 'product' field.
+   * @param value the value to set.
+   */
+  public void setProduct(String value) {
+    this.product = value;
+  }
+
+  /**
    * Creates a new Index RecordBuilder.
    * @return A new Index RecordBuilder
    */
@@ -126,19 +139,22 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
     return new Builder(other);
   }
 
+  @Override
   public void write(DataOutput dataOutput) throws IOException {
     byte[] bytes = this.toString().getBytes();
     dataOutput.writeInt(bytes.length);
     dataOutput.write(bytes, 0, bytes.length);
   }
 
+  @Override
   public void readFields(DataInput dataInput) throws IOException {
     int length = dataInput.readInt();
     byte[] bytes = new byte[length];
     dataInput.readFully(bytes, 0, length);
-    Index index = (Index)this.gson.fromJson(new String(bytes), Index.class);
+    Index index = this.gson.fromJson(new String(bytes), Index.class);
     this.setGlobalId(index.getGlobalId());
     this.setId(index.getId());
+    this.setProduct(index.getProduct());
   }
 
   /**
@@ -149,6 +165,7 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
 
     private String id;
     private String global_id;
+    private String product;
 
     /** Creates a new Builder */
     private Builder() {
@@ -169,6 +186,10 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
         this.global_id = data().deepCopy(fields()[1].schema(), other.global_id);
         fieldSetFlags()[1] = true;
       }
+      if (isValidValue(fields()[2], other.product)) {
+        this.product = data().deepCopy(fields()[2].schema(), other.product);
+        fieldSetFlags()[2] = true;
+      }
     }
 
     /**
@@ -184,6 +205,10 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
       if (isValidValue(fields()[1], other.global_id)) {
         this.global_id = data().deepCopy(fields()[1].schema(), other.global_id);
         fieldSetFlags()[1] = true;
+      }
+      if (isValidValue(fields()[2], other.product)) {
+        this.product = data().deepCopy(fields()[2].schema(), other.product);
+        fieldSetFlags()[2] = true;
       }
     }
 
@@ -265,11 +290,52 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
       return this;
     }
 
+    /**
+      * Gets the value of the 'product' field.
+      * @return The value.
+      */
+    public String getProduct() {
+      return product;
+    }
+
+    /**
+      * Sets the value of the 'product' field.
+      * @param value The value of 'product'.
+      * @return This builder.
+      */
+    public Builder setProduct(String value) {
+      validate(fields()[2], value);
+      this.product = value;
+      fieldSetFlags()[2] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'product' field has been set.
+      * @return True if the 'product' field has been set, false otherwise.
+      */
+    public boolean hasProduct() {
+      return fieldSetFlags()[2];
+    }
+
+
+    /**
+      * Clears the value of the 'product' field.
+      * @return This builder.
+      */
+    public Builder clearProduct() {
+      product = null;
+      fieldSetFlags()[2] = false;
+      return this;
+    }
+
+    @Override
     public Index build() {
       try {
         Index record = new Index();
         record.id = fieldSetFlags()[0] ? this.id : (String) defaultValue(fields()[0]);
         record.global_id = fieldSetFlags()[1] ? this.global_id : (String) defaultValue(fields()[1]);
+        record.product = fieldSetFlags()[2] ? this.product : (String) defaultValue(fields()[2]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
@@ -281,7 +347,7 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
     WRITER$ = new org.apache.avro.specific.SpecificDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
-    throws IOException {
+    throws java.io.IOException {
     WRITER$.write(this, SpecificData.getEncoder(out));
   }
 
@@ -289,7 +355,7 @@ public class Index extends org.apache.avro.specific.SpecificRecordBase implement
     READER$ = new org.apache.avro.specific.SpecificDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
-    throws IOException {
+    throws java.io.IOException {
     READER$.read(this, SpecificData.getDecoder(in));
   }
 
