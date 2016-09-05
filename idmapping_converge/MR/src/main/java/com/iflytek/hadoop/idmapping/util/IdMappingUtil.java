@@ -11,6 +11,7 @@ import java.util.Random;
 public class IdMappingUtil {
 	public static Random random = null;
 	public static String Random = "Random";
+	private static final int ACTIVITY_LIMIT = 60;
 
 	public synchronized static String getRandomString(String taskId, int taskNum) {
 		if (random == null) {
@@ -35,25 +36,6 @@ public class IdMappingUtil {
     	temp.setAndroidId(ids.getAndroidId());
     	return temp;
 	}
-
-//	public synchronized static IDs setIds(IDs tempIDs, boolean isNeedGID)
-//	{
-//		IDs idss = new IDs();
-//		idss.setGlobalId("");
-//		idss.setImei(tempIDs.getImei());
-//		idss.setUid(tempIDs.getUid());
-//		idss.setMac(tempIDs.getMac());
-//		idss.setIdfa(tempIDs.getIdfa());
-//		idss.setOpenudid(tempIDs.getOpenudid());
-//		idss.setImsi(tempIDs.getImsi());
-//		idss.setPhoneNumber(tempIDs.getPhoneNumber());
-//		idss.setDid(tempIDs.getDid());
-//		idss.setAndroidId(tempIDs.getAndroidId());
-//		if (isNeedGID == true) {
-//			idss.setGlobalId(getOneGlobal_Id(idss));
-//		}
-//		return idss;
-//	}
 
 	public synchronized static String getGlobalId(IDs ids){
 		return MD5(ids.toString());
@@ -97,7 +79,9 @@ public class IdMappingUtil {
 			for ( Map.Entry<String, Integer> id :mapIn.entrySet()) {
 				idKey = id.getKey();
 				idValue = id.getValue();
-
+				if (idValue > ACTIVITY_LIMIT) {
+					continue;
+				}
 				if(mapOut.containsKey(idKey) == true) {
 					if(idValue < mapOut.get(idKey)){
 					    mapOut.put(idKey, idValue);
