@@ -79,8 +79,8 @@ public class IDMappingClient2 {
             });
             hTableIDs = new HTable(conf, zkTableName);
             hTableIndex = new HTable(conf, zkIndexName);
-            System.out.println("HTable IDs  :" + zkTableName);
-            System.out.println("HTable Index :" + zkIndexName);
+//            System.out.println("HTable IDs  :" + zkTableName);
+//            System.out.println("HTable Index :" + zkIndexName);
         } catch (IOException e) {
             System.err.println("HBase connect failed!");
             System.exit(-1);
@@ -93,9 +93,10 @@ public class IDMappingClient2 {
         inited = true;
     }
 
-    public synchronized void close() throws IOException {
+    public synchronized void close() throws IOException, InterruptedException {
         hTableIDs.close();
         hTableIndex.close();
+        connectWatcher.close();
     }
 
     public String getGlobalID(String key) throws IOException {
@@ -137,7 +138,7 @@ public class IDMappingClient2 {
         System.out.println("  ---zkPath Optional , hbase zookeeper path");
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length != 1 && args.length != 2 ) {
             help();
             System.exit(-1);
