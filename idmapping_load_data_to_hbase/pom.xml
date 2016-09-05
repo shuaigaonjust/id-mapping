@@ -63,6 +63,12 @@
             <version>2.6.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>

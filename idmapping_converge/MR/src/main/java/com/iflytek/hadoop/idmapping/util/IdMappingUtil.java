@@ -3,6 +3,7 @@ package com.iflytek.hadoop.idmapping.util;
 import ids.IDs;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -35,47 +36,27 @@ public class IdMappingUtil {
     	return temp;
 	}
 
-	public synchronized static IDs setIds(IDs tempIDs, boolean isNeedGID)
-	{
-		IDs idss = new IDs();
-		idss.setGlobalId("");
-		idss.setImei(tempIDs.getImei());
-		idss.setUid(tempIDs.getUid());
-		idss.setMac(tempIDs.getMac());
-		idss.setIdfa(tempIDs.getIdfa());
-		idss.setOpenudid(tempIDs.getOpenudid());
-		idss.setImsi(tempIDs.getImsi());
-		idss.setPhoneNumber(tempIDs.getPhoneNumber());
-		idss.setDid(tempIDs.getDid());
-		idss.setAndroidId(tempIDs.getAndroidId());
-		if (isNeedGID == true) {
-			idss.setGlobalId(getOneGlobal_Id(idss));
-		}
-		return idss;
-	}
+//	public synchronized static IDs setIds(IDs tempIDs, boolean isNeedGID)
+//	{
+//		IDs idss = new IDs();
+//		idss.setGlobalId("");
+//		idss.setImei(tempIDs.getImei());
+//		idss.setUid(tempIDs.getUid());
+//		idss.setMac(tempIDs.getMac());
+//		idss.setIdfa(tempIDs.getIdfa());
+//		idss.setOpenudid(tempIDs.getOpenudid());
+//		idss.setImsi(tempIDs.getImsi());
+//		idss.setPhoneNumber(tempIDs.getPhoneNumber());
+//		idss.setDid(tempIDs.getDid());
+//		idss.setAndroidId(tempIDs.getAndroidId());
+//		if (isNeedGID == true) {
+//			idss.setGlobalId(getOneGlobal_Id(idss));
+//		}
+//		return idss;
+//	}
 
-	public synchronized static String getOneGlobal_Id(IDs ids){
-		if(ids.getImei().size() != 0) {
-			return ids.getImei().keySet().iterator().next();
-		} else if(ids.getMac().size() != 0){
-			return ids.getMac().keySet().iterator().next();
-		} else if(ids.getOpenudid().size() != 0){
-			return ids.getOpenudid().keySet().iterator().next();
-		} else if(ids.getIdfa().size() != 0){
-		    return ids.getIdfa().keySet().iterator().next();
-		} else if(ids.getImsi().size() != 0){
-			return ids.getImsi().keySet().iterator().next();
-		} else if(ids.getPhoneNumber().size() != 0){
-			return ids.getPhoneNumber().keySet().iterator().next();
-		} else if(ids.getDid().size() != 0) {
-			return ids.getDid().keySet().iterator().next();
-		} else if(ids.getUid().size() != 0) {
-			return ids.getUid().keySet().iterator().next();
-		} else if(ids.getAndroidId().size() != 0) {
-			return ids.getAndroidId().keySet().iterator().next();
-		} else{
-			return "";
-		}
+	public synchronized static String getGlobalId(IDs ids){
+		return MD5(ids.toString());
 	}
 
 	public synchronized static Map<String, Integer> getMapByIdType(IDs key, String type) throws IOException {
@@ -167,5 +148,31 @@ public class IdMappingUtil {
 		addIdToMap(ids.getPhoneNumber(), tempIDs.getPhoneNumber());
 		addIdToMap(ids.getDid(), tempIDs.getDid());
 		addIdToMap(ids.getAndroidId(), tempIDs.getAndroidId());
+	}
+
+	public final static String MD5(String s) {
+		char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+		try {
+			byte[] btInput = s.getBytes();
+			// 获得MD5摘要算法的 MessageDigest 对象
+			MessageDigest mdInst = MessageDigest.getInstance("MD5");
+			// 使用指定的字节更新摘要
+			mdInst.update(btInput);
+			// 获得密文
+			byte[] md = mdInst.digest();
+			// 把密文转换成十六进制的字符串形式
+			int j = md.length;
+			char str[] = new char[j * 2];
+			int k = 0;
+			for (int i = 0; i < j; i++) {
+				byte byte0 = md[i];
+				str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+				str[k++] = hexDigits[byte0 & 0xf];
+			}
+			return new String(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

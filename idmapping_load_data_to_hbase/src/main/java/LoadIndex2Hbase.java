@@ -6,9 +6,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -31,28 +28,27 @@ import java.io.IOException;
 public class LoadIndex2Hbase implements Tool {
 
     private String zkPath = "10.10.12.82,10.10.12.83,10.10.12.84";
+    private String zkIndexPath = "/idmapping/active_index";
+    private ConnectWatcher connectWatcher = new ConnectWatcher();
+    private String zkIndexName = new String();
 
-    public void setConf(Configuration configuration) {
-
-    }
-
+    public void setConf(Configuration configuration) {}
     public Configuration getConf() {
         return null;
     }
 
     public static class LoadIndex2HbaseMapper extends Mapper<AvroKey<Index>, NullWritable, ImmutableBytesWritable, Put> {
-
-        byte[] family=Bytes.toBytes("global_id");
-        byte[] qualifier=Bytes.toBytes("value");
+        byte[] family = Bytes.toBytes("global_id");
+        byte[] qualifier = Bytes.toBytes("value");
         byte[] rowKey = null;
         byte[] hValue = null;
 
         protected void map(AvroKey<Index> key, NullWritable value, Context context) throws IOException, InterruptedException {
             String id = key.datum().getId();
             String globalID = key.datum().getGlobalId();
-            byte[] rowKey= Bytes.toBytes(id);
+            rowKey = Bytes.toBytes(id);
             ImmutableBytesWritable rowKeyWritable=new ImmutableBytesWritable(rowKey);
-            byte[] hValue=Bytes.toBytes(globalID);
+            hValue = Bytes.toBytes(globalID);
             Put put=new Put(rowKey);
             put.addColumn(family, qualifier, hValue);
             context.write(rowKeyWritable, put);
@@ -60,6 +56,16 @@ public class LoadIndex2Hbase implements Tool {
     }
 
     public int run(String[] strings) throws Exception {
+        connectWatcher.connect(zkPath);
+        zkIndexName = "";
+        zkIndexName = connectWatcher.getData(zkIndexPath, null);
+        if (zkIndexName.equals("idmapping_index") || zkIndexName.equals("idmapping_index_1")) {
+            zkIndexName = "idmapping_index_2";
+        } else if (zkIndexName.equals("idmapping_index_2")) {
+            zkIndexName = "idmapping_index_1";
+        } else {
+            throw new Exception("index table name is not valid :" + zkIndexName);
+        }
         Configuration conf = new Configuration();
         HBaseConfiguration.addHbaseResources(conf);
         conf.set("mapreduce.job.queuename", "dmp");
@@ -83,9 +89,9 @@ public class LoadIndex2Hbase implements Tool {
         hbaseConfiguration.set("mapreduce.job.queuename", "dmp");
         hbaseConfiguration.set("mapreduce.job.name", "idmapping-bulkload-index" + strings[1]);
         hbaseConfiguration.set("hbase.zookeeper.quorum", zkPath);
-        HTable table =new HTable(hbaseConfiguration, "idmapping_index");
-        Connection connection = ConnectionFactory.createConnection(hbaseConfiguration);
-        TableName tableName = TableName.valueOf("idmapping_index");
+        HTable table = new HTable(hbaseConfiguration, zkIndexName);
+//        Connection connection = ConnectionFactory.createConnection(hbaseConfiguration);
+//        TableName tableName = TableName.valueOf(zkIndexName);
         HFileOutputFormat2.configureIncrementalLoad(job, table, table);
         int exitCode = job.waitForCompletion(true) == true ? 0 : 1;
         if (exitCode == 0) {
@@ -93,6 +99,8 @@ public class LoadIndex2Hbase implements Tool {
             loadFfiles.doBulkLoad(new Path(strings[2]), table);//导入数据
             System.out.println("Bulk Load Completed..");
         }
+        connectWatcher.setData(zkIndexPath, zkIndexName);
+        connectWatcher.close();
         return  exitCode;
     }
 

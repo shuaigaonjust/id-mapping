@@ -28,15 +28,21 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.6.2</version>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.8.0</version>
         </dependency>
 
         <dependency>
-            <groupId>chentao</groupId>
-            <artifactId>hadoop_avro</artifactId>
-            <version>1.0</version>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-mapred</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.6.2</version>
         </dependency>
 
     </dependencies>
@@ -52,7 +58,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.iflytek.cloudplatform.dmp.idmapping.IDMappingClient</mainClass>
+                            <mainClass>com.iflytek.cloudplatform.dmp.idmapping.IDMappingClient2</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -62,7 +68,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.iflytek.cloudplatform.dmp.idmapping.IDMappingClient</mainClass>
+                            <mainClass>com.iflytek.cloudplatform.dmp.idmapping.IDMappingClient2</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

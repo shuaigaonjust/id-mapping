@@ -8,12 +8,23 @@ import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
 public class IDMappingClient2 {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IDMappingClient2.class);
     private String zkPath;
+    private String zkIdsPath = "/idmapping/active_ids";
+    private String zkIndexPath = "/idmapping/active_index";
+    private ConnectWatcher connectWatcher = new ConnectWatcher();
+    private String zkTableName = new String();
+    private String zkIndexName = new String();
     private Configuration conf;
     private HTable hTableIDs;
     private HTable hTableIndex;
@@ -25,7 +36,7 @@ public class IDMappingClient2 {
         System.out.println("set zkPath to " + zkPath);
     }
 
-    public synchronized void init() {
+    public synchronized void init(){
         if (inited == true) {
             return;
         }
@@ -33,11 +44,50 @@ public class IDMappingClient2 {
         conf =  HBaseConfiguration.create();
         conf.set("hbase.zookeeper.quorum", zkPath);
         try {
-            hTableIDs = new HTable(conf, "idmapping_ids_2");
-            hTableIndex = new HTable(conf, "idmapping_index");
+            connectWatcher.connect(zkPath);
+            zkTableName = connectWatcher.getData(zkIdsPath, new Watcher() {
+                public void process(WatchedEvent event) {
+                    try {
+                        zkTableName = connectWatcher.getData(zkIdsPath, this);
+                        hTableIDs.close();
+                        hTableIDs = new HTable(conf, zkTableName);
+                        LOG.info("HTable IDs Changed :" + zkTableName);
+                    } catch (KeeperException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            zkIndexName = connectWatcher.getData(zkIndexPath, new Watcher() {
+                public void process(WatchedEvent event) {
+                    try {
+                        zkIndexName = connectWatcher.getData(zkIndexPath, this);
+                        hTableIndex.close();
+                        hTableIndex = new HTable(conf, zkIndexName);
+                        LOG.info("HTable Index Changed :" + zkIndexName);
+                    } catch (KeeperException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            hTableIDs = new HTable(conf, zkTableName);
+            hTableIndex = new HTable(conf, zkIndexName);
+            System.out.println("HTable IDs  :" + zkTableName);
+            System.out.println("HTable Index :" + zkIndexName);
         } catch (IOException e) {
             System.err.println("HBase connect failed!");
             System.exit(-1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (KeeperException e) {
+            e.printStackTrace();
         }
         gson = new Gson();
         inited = true;

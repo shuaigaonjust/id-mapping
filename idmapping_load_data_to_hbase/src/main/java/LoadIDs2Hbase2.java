@@ -30,11 +30,11 @@ import java.io.IOException;
 public class LoadIDs2Hbase2 implements Tool {
 
     private String zkPath = "10.10.12.82,10.10.12.83,10.10.12.84";
+    private String zkIdsPath = "/idmapping/active_ids";
+    private ConnectWatcher connectWatcher = new ConnectWatcher();
+    private String zkTableName = new String();
 
-    public void setConf(Configuration configuration) {
-
-    }
-
+    public void setConf(Configuration configuration) {}
     public Configuration getConf() {
         return null;
     }
@@ -58,6 +58,11 @@ public class LoadIDs2Hbase2 implements Tool {
     }
 
     public int run(String[] strings) throws Exception {
+        connectWatcher.connect(zkPath);
+        zkTableName = "";
+        zkTableName = connectWatcher.getData(zkIdsPath, null);
+        zkTableName = zkTableName.equals("idmapping_ids_2")?"idmapping_ids_1":"idmapping_ids_2";
+
         Configuration conf = new Configuration();
         conf.set("mapreduce.job.queuename", "dmp");
         conf.set("mapreduce.job.name", "idmapping_load_ids_to_hbase");
@@ -80,9 +85,9 @@ public class LoadIDs2Hbase2 implements Tool {
         hbaseConfiguration.set("mapreduce.job.queuename", "dmp");
         hbaseConfiguration.set("mapreduce.job.name", "idmapping-bulkload-ids" + strings[1]);
         hbaseConfiguration.set("hbase.zookeeper.quorum", zkPath);
-        HTable table =new HTable(hbaseConfiguration, "idmapping_ids_2");
+        HTable table = new HTable(hbaseConfiguration, zkTableName);
         Connection connection = ConnectionFactory.createConnection(hbaseConfiguration);
-        TableName tableName = TableName.valueOf("idmapping_ids_2");
+        TableName tableName = TableName.valueOf(zkTableName);
         HFileOutputFormat2.configureIncrementalLoad(job, connection.getTable(tableName), connection.getRegionLocator(tableName));
         int exitCode = job.waitForCompletion(true) == true ? 0 : 1;
         if (exitCode == 0) {
@@ -90,6 +95,8 @@ public class LoadIDs2Hbase2 implements Tool {
             loadFfiles.doBulkLoad(new Path(strings[2]), table);//导入数据
             System.out.println("Bulk Load Completed..");
         }
+        connectWatcher.setData(zkIdsPath, zkTableName);
+        connectWatcher.close();
         return  exitCode;
     }
 }

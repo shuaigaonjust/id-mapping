@@ -1,15 +1,13 @@
 package com.iflytek.hadoop.idmapping.mapreduce;
+import com.iflytek.hadoop.idmapping.util.IdMappingUtil;
 import ids.IDs;
-
-import java.io.IOException;
-
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.iflytek.hadoop.idmapping.util.IdMappingUtil;
+import java.io.IOException;
 
 public class IdMappingMR3 {
     public static class IdMappingM3 extends Mapper<AvroKey<IDs>, NullWritable, Text, IDs>{
@@ -29,9 +27,9 @@ public class IdMappingMR3 {
 		@Override
 		public void reduce(Text key,Iterable<IDs> values,Context context) throws IOException,InterruptedException {
 			IDs ids = values.iterator().next();
-			String tempGlobal_id = IdMappingUtil.getOneGlobal_Id(ids);
-			if(!tempGlobal_id.equals("")){
-			  ids.setGlobalId(tempGlobal_id);
+			String tempGlobalId = IdMappingUtil.getGlobalId(ids);
+			if(!tempGlobalId.equals("")){
+			  ids.setGlobalId(tempGlobalId);
 			  context.write(null, ids);
 			}
 		}
