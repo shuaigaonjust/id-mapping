@@ -6,6 +6,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -70,6 +72,8 @@ public class LoadIndex2Hbase implements Tool {
         HBaseConfiguration.addHbaseResources(conf);
         conf.set("mapreduce.job.queuename", "dmp");
         conf.set("mapreduce.job.name", "idmapping_load_index_to_hbase");
+//        conf.setInt("mapreduce.reduce.memory.mb", 2048);
+//        conf.setInt("mapreduce.reduce.java.opts", 2048);
         Job job = new Job(conf);
         FileSystem fs = FileSystem.get(conf);
         Path output = new Path(strings[2]);
@@ -89,6 +93,12 @@ public class LoadIndex2Hbase implements Tool {
         hbaseConfiguration.set("mapreduce.job.queuename", "dmp");
         hbaseConfiguration.set("mapreduce.job.name", "idmapping-bulkload-index" + strings[1]);
         hbaseConfiguration.set("hbase.zookeeper.quorum", zkPath);
+        HBaseAdmin admin = new HBaseAdmin(hbaseConfiguration);
+        HTableDescriptor td = admin.getTableDescriptor(Bytes.toBytes(zkIndexName));
+        admin.disableTable(zkIndexName);
+        admin.deleteTable(zkIndexName);
+        byte[][] splits = LoadIDs2Hbase2.getHexSplits("100000000000000000", "ffffffffffffffffffff", 800);
+        admin.createTable(td, splits);
         HTable table = new HTable(hbaseConfiguration, zkIndexName);
 //        Connection connection = ConnectionFactory.createConnection(hbaseConfiguration);
 //        TableName tableName = TableName.valueOf(zkIndexName);
@@ -99,7 +109,7 @@ public class LoadIndex2Hbase implements Tool {
             loadFfiles.doBulkLoad(new Path(strings[2]), table);//导入数据
             System.out.println("Bulk Load Completed..");
         }
-        connectWatcher.setData(zkIndexPath, zkIndexName);
+//        connectWatcher.setData(zkIndexPath, zkIndexName);
         connectWatcher.close();
         return  exitCode;
     }

@@ -20,7 +20,7 @@ public class UDFGenMacMap extends UDF {
         Map<String, Integer> map = new HashMap<String, Integer>();
 
         if (type.equals("mac")) {
-            Matcher m = mac.matcher(str);
+            Matcher m = mac.matcher(str.toLowerCase());
             if (m.find()) {
                 strMac = m.group(2) + ":"
                         + m.group(3) + ":"
@@ -37,7 +37,7 @@ public class UDFGenMacMap extends UDF {
     }
 
     public static void main(String[] args) {
-        String s = "00 06 38 51:48:34";
+        String s = "00 06 3F 51:48:34";
         UDFGenMacMap udfGenMacMap = new UDFGenMacMap();
         System.out.println(udfGenMacMap.evaluate(s,"mac").keySet().toString());
     }

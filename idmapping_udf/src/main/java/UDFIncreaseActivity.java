@@ -23,6 +23,22 @@ public class UDFIncreaseActivity extends UDF {
         return mapResult;
     }
 
+    public Map<String, Integer> evaluate(Map<String, Integer> map, int toLowCase) {
+        Map<String, Integer> mapResult = new HashMap<String, Integer>();
+        for(Map.Entry<String, Integer> tmp : map.entrySet()) {
+            if (tmp.getKey().toUpperCase().equals("EMPTY") || tmp.getKey().length() == 0) {
+                continue;
+            }
+            if ((tmp.getValue() & 0xff) >= 254) {
+                // continue; //continue将删除这个ID
+                mapResult.put(tmp.getKey().toLowerCase(), tmp.getValue());
+            } else {
+                mapResult.put(tmp.getKey().toLowerCase(), tmp.getValue() + 1);
+            }
+        }
+        return mapResult;
+    }
+
     public static void main(String[] args) {
         UDFIncreaseActivity udfIncreaseActivity = new UDFIncreaseActivity();
         Map<String, Integer> map = new HashMap<String, Integer>();

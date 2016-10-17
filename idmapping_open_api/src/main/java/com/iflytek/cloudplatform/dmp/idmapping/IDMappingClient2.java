@@ -79,8 +79,8 @@ public class IDMappingClient2 {
             });
             hTableIDs = new HTable(conf, zkTableName);
             hTableIndex = new HTable(conf, zkIndexName);
-//            System.out.println("HTable IDs  :" + zkTableName);
-//            System.out.println("HTable Index :" + zkIndexName);
+            System.out.println("HTable IDs  :" + zkTableName);
+            System.out.println("HTable Index :" + zkIndexName);
         } catch (IOException e) {
             System.err.println("HBase connect failed!");
             System.exit(-1);
@@ -97,6 +97,7 @@ public class IDMappingClient2 {
         hTableIDs.close();
         hTableIndex.close();
         connectWatcher.close();
+        inited = false;
     }
 
     public String getGlobalID(String key) throws IOException {
