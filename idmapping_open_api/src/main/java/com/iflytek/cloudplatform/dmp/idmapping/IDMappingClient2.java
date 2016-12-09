@@ -102,6 +102,9 @@ public class IDMappingClient2 {
 
     public String getGlobalID(String key) throws IOException {
         Get globalKeyGet = new Get(Bytes.toBytes(key));
+        if (globalKeyGet == null) {
+            return null;
+        }
         Result keyResult = hTableIndex.get(globalKeyGet);
         if (keyResult.isEmpty()) {
             return null;
