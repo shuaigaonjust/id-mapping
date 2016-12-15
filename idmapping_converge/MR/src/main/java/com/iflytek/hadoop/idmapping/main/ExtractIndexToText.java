@@ -37,11 +37,14 @@ public class ExtractIndexToText extends Configured implements Tool {
                 idIndexFileStatus = fis;
             }
         }
-        Path idIndexPath = new Path("/user/taochen4/tmp/tag_with_idmapping/*/*");//idIndexFileStatus.getPath();
+        Path idIndexPath = idIndexFileStatus.getPath();
         System.out.println("input path is :" + idIndexPath.toString());
 
         String output = args[0];
         Path tmpOutput = new Path(output);
+        if (fs.exists(tmpOutput)) {
+            fs.delete(tmpOutput, true);
+        }
         Job job = new Job(getConf());
         job.setJarByClass(ExtractIndexToText.class);
 

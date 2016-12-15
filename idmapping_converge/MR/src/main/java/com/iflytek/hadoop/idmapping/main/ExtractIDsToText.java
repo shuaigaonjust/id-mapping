@@ -1,6 +1,6 @@
 package com.iflytek.hadoop.idmapping.main;
 
-import com.iflytek.hadoop.idmapping.mapreduce.ExtractIndexToTextMR;
+import com.iflytek.hadoop.idmapping.mapreduce.ExtractIDsToTextMR;
 import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.commons.logging.Log;
@@ -29,24 +29,27 @@ public class ExtractIDsToText extends Configured implements Tool {
         }
         getConf().set("mapreduce.job.queuename", "dmp");
         FileSystem fs = FileSystem.get(getConf());
-        Path idIndexParentPath = new Path("/user/compass/public/hive/idmapping/ids_2/product=release");
-        FileStatus[] fileStatus = fs.listStatus(idIndexParentPath);
-        FileStatus idIndexFileStatus = null;
+        Path idsParentPath = new Path("/user/compass/public/hive/idmapping/ids_2/product=release");
+        FileStatus[] fileStatus = fs.listStatus(idsParentPath);
+        FileStatus idIdsFileStatus = null;
         for (FileStatus fis : fileStatus) {
-            if (idIndexFileStatus == null || idIndexFileStatus.getModificationTime()< fis.getModificationTime()) {
-                idIndexFileStatus = fis;
+            if (idIdsFileStatus == null || idIdsFileStatus.getModificationTime()< fis.getModificationTime()) {
+                idIdsFileStatus = fis;
             }
         }
-        Path idIndexPath = new Path("/user/taochen4/tmp/tag_with_idmapping/*/*");//idIndexFileStatus.getPath();
-        System.out.println("input path is :" + idIndexPath.toString());
+        Path idIdsPath = idIdsFileStatus.getPath();
+        System.out.println("input path is :" + idIdsPath.toString());
 
         String output = args[0];
         Path tmpOutput = new Path(output);
+        if (fs.exists(tmpOutput)) {
+            fs.delete(tmpOutput, true);
+        }
         Job job = new Job(getConf());
         job.setJarByClass(ExtractIDsToText.class);
 
         job.setJobName(ExtractIDsToText.class.getName());
-        job.setMapperClass(ExtractIndexToTextMR.ExtractIndexToTextMapper.class);
+        job.setMapperClass(ExtractIDsToTextMR.ExtractIDsToTextMapper.class);
         job.setNumReduceTasks(0);
         AvroJob.setInputKeySchema(job, ids.IDs.getClassSchema());
         FileOutputFormat.setOutputPath(job, tmpOutput);
@@ -55,7 +58,7 @@ public class ExtractIDsToText extends Configured implements Tool {
         job.setMapOutputValueClass(Text.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
-        MultipleInputs.addInputPath(job, idIndexPath,
+        MultipleInputs.addInputPath(job, idIdsPath,
                 AvroKeyInputFormat.class);
 
         job.setOutputFormatClass(TextOutputFormat.class);
