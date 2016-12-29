@@ -55,6 +55,8 @@ public class IdMappingUtil {
 				return key.getImsi();
 			case "phonenumber":
 				return key.getPhoneNumber();
+			case "android_id":
+				return key.getAndroidId();
 			case "all":
 				Map<String, Integer> map = new HashMap<String, Integer>();
 				map.putAll(key.getImei());
@@ -63,6 +65,7 @@ public class IdMappingUtil {
 				map.putAll(key.getOpenudid());
 				map.putAll(key.getImsi());
 				map.putAll(key.getPhoneNumber());
+				map.putAll(key.getAndroidId());
 				return map;
 			default:
 				throw new IOException();

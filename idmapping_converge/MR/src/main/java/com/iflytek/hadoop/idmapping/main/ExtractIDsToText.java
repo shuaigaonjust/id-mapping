@@ -35,6 +35,7 @@ public class ExtractIDsToText extends Configured implements Tool {
         for (FileStatus fis : fileStatus) {
             if (idIdsFileStatus == null || idIdsFileStatus.getModificationTime()< fis.getModificationTime()) {
                 idIdsFileStatus = fis;
+                idIdsFileStatus.getPermission();
             }
         }
         Path idIdsPath = idIdsFileStatus.getPath();
