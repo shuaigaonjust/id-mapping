@@ -24,6 +24,7 @@ public class GenIndexUniqueMR {
                 index.setGlobalId(gid);
                 index.setProduct(product);
                 index.setId(value);
+//                index.setId(product + "_" + value);
                 context.write(new Text(value), index);
             }
         }

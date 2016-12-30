@@ -8,6 +8,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
+import java.util.TreeSet;
 
 public class IdMappingMR3 {
     public static class IdMappingM3 extends Mapper<AvroKey<IDs>, NullWritable, Text, IDs>{
@@ -16,7 +17,15 @@ public class IdMappingMR3 {
 		* */
 		@Override
 		public void map(AvroKey<IDs> key,NullWritable value,Context context) throws IOException,InterruptedException {
-			context.write(new Text(key.datum().toString()), key.datum());
+			StringBuffer sb = new StringBuffer();
+			sb.append(new TreeSet(key.datum().getImei().keySet()));
+			sb.append(new TreeSet(key.datum().getMac().keySet()));
+			sb.append(new TreeSet(key.datum().getOpenudid().keySet()));
+			sb.append(new TreeSet(key.datum().getIdfa().keySet()));
+			sb.append(new TreeSet(key.datum().getImsi().keySet()));
+			sb.append(new TreeSet(key.datum().getAndroidId().keySet()));
+			sb.append(new TreeSet(key.datum().getPhoneNumber().keySet()));
+			context.write(new Text(sb.toString()), key.datum());
 		}
     }
 
@@ -26,12 +35,13 @@ public class IdMappingMR3 {
         * */
 		@Override
 		public void reduce(Text key,Iterable<IDs> values,Context context) throws IOException,InterruptedException {
-			IDs ids = values.iterator().next();
-			String tempGlobalId = IdMappingUtil.getGlobalId(ids);
-			if(!tempGlobalId.equals("")){
-			  ids.setGlobalId(tempGlobalId);
-			  context.write(null, ids);
+			IDs ids = new IDs();
+			for (IDs tmpIDs : values ) {
+				ids.updateIDs(tmpIDs);
 			}
+			String tempGlobalId = IdMappingUtil.getGlobalId(ids);
+			ids.setGlobalId(tempGlobalId);
+			context.write(null, ids);
 		}
     }
 }

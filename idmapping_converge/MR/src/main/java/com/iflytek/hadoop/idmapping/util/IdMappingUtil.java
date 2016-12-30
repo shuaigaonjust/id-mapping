@@ -41,31 +41,39 @@ public class IdMappingUtil {
 		return MD5(ids.toString());
 	}
 
+	public synchronized static Map<String, Integer> getIDMapBytype(Map<String, Integer> map, String type) {
+		Map<String, Integer> ret = new HashMap<String ,Integer>();
+		for (Map.Entry<String, Integer> entry : map.entrySet()) {
+			ret.put(type + entry.getKey(), entry.getValue());
+		}
+		return ret;
+	}
+
 	public synchronized static Map<String, Integer> getMapByIdType(IDs key, String type) throws IOException {
 		switch(type){
 			case "imei":
-				return key.getImei();
+				return getIDMapBytype(key.getImei(), "imei");
 			case "mac":
-				return  key.getMac();
+				return  getIDMapBytype(key.getMac(), "mac");
 			case "idfa":
-				return key.getIdfa();
+				return getIDMapBytype(key.getIdfa(), "idfa");
 			case "openudid":
-				return key.getOpenudid();
+				return getIDMapBytype(key.getOpenudid(), "openudid");
 			case "imsi":
-				return key.getImsi();
+				return getIDMapBytype(key.getImsi(), "imsi");
 			case "phonenumber":
-				return key.getPhoneNumber();
+				return getIDMapBytype(key.getPhoneNumber(), "phonenumber");
 			case "android_id":
-				return key.getAndroidId();
+				return getIDMapBytype(key.getAndroidId(), "androidid");
 			case "all":
 				Map<String, Integer> map = new HashMap<String, Integer>();
-				map.putAll(key.getImei());
-				map.putAll(key.getMac());
-				map.putAll(key.getIdfa());
-				map.putAll(key.getOpenudid());
-				map.putAll(key.getImsi());
-				map.putAll(key.getPhoneNumber());
-				map.putAll(key.getAndroidId());
+				map.putAll(getIDMapBytype(key.getImei(), "imei"));
+				map.putAll(getIDMapBytype(key.getMac(), "mac"));
+				map.putAll(getIDMapBytype(key.getIdfa(), "idfa"));
+				map.putAll(getIDMapBytype(key.getOpenudid(), "openudid"));
+				map.putAll(getIDMapBytype(key.getImsi(), "imsi"));
+				map.putAll(getIDMapBytype(key.getPhoneNumber(), "phonenumber"));
+				map.putAll(getIDMapBytype(key.getAndroidId(), "androidid"));
 				return map;
 			default:
 				throw new IOException();

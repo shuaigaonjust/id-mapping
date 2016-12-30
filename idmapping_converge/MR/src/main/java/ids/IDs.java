@@ -5,14 +5,13 @@
  */
 package ids;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
+import com.google.gson.Gson;
 import org.apache.avro.specific.SpecificData;
 import org.apache.hadoop.io.Writable;
 
-import com.google.gson.Gson;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
@@ -38,6 +37,63 @@ public class IDs extends org.apache.avro.specific.SpecificRecordBase implements 
    * one should use <code>newBuilder()</code>.
    */
   public IDs() {}
+
+  public void updateIDs(IDs updateIDs) {
+    // imei
+    for (String key : updateIDs.getImei().keySet()) {
+      if (!Imei.containsKey(key) || Imei.get(key) > updateIDs.getImei().get(key)) {
+        Imei.put(key, (Integer) updateIDs.getImei().get(key));
+      }
+    }
+    // mac
+    for (String key : updateIDs.getMac().keySet()) {
+      if (!Mac.containsKey(key) || Mac.get(key) > updateIDs.getMac().get(key)) {
+        Mac.put(key, (Integer) updateIDs.getMac().get(key));
+      }
+    }
+    // openudid
+    for (String key : updateIDs.getOpenudid().keySet()) {
+      if (!Openudid.containsKey(key) || Openudid.get(key) > updateIDs.getOpenudid().get(key)) {
+        Openudid.put(key, (Integer) updateIDs.getOpenudid().get(key));
+      }
+    }
+    // imsi
+    for (String key : updateIDs.getImsi().keySet()) {
+      if (!Imsi.containsKey(key) || Imsi.get(key) > updateIDs.getImsi().get(key)) {
+        Imsi.put(key, (Integer) updateIDs.getImsi().get(key));
+      }
+    }
+    // phone number
+    for (String key : updateIDs.getPhoneNumber().keySet()) {
+      if (!Phone_Number.containsKey(key) || Phone_Number.get(key) > updateIDs.getPhoneNumber().get(key)) {
+        Phone_Number.put(key, (Integer) updateIDs.getPhoneNumber().get(key));
+      }
+    }
+    // idfa
+    for (String key : updateIDs.getIdfa().keySet()) {
+      if (!Idfa.containsKey(key) || Idfa.get(key) > updateIDs.getIdfa().get(key)) {
+        Idfa.put(key, (Integer) updateIDs.getIdfa().get(key));
+      }
+    }
+    // android id
+    for (String key : updateIDs.getAndroidId().keySet()) {
+      if (!Android_Id.containsKey(key) || Android_Id.get(key) > updateIDs.getAndroidId().get(key)) {
+        Android_Id.put(key, (Integer) updateIDs.getAndroidId().get(key));
+      }
+    }
+    // uid
+    for (String key : updateIDs.getUid().keySet()) {
+      if (!Uid.containsKey(key) || Uid.get(key) > updateIDs.getUid().get(key)) {
+        Uid.put(key, (Integer) updateIDs.getUid().get(key));
+      }
+    }
+    // did
+    for (String key : updateIDs.getDid().keySet()) {
+      if (!Did.containsKey(key) || Did.get(key) > updateIDs.getDid().get(key)) {
+        Did.put(key, (Integer) updateIDs.getDid().get(key));
+      }
+    }
+  }
 
   @Override
   protected Object clone() throws CloneNotSupportedException {
